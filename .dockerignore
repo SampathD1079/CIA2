@@ -1,0 +1,7 @@
+
+.git
+.vscode
+.idea
+*.iml
+target/*
+!target/cloud-cicd-demo-1.0.0.jar

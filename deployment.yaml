@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloud-cicd-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cloud-cicd-demo
+  template:
+    metadata:
+      labels:
+        app: cloud-cicd-demo
+    spec:
+      containers:
+        - name: cloud-cicd-demo
+          image: cloud-cicd-demo:1.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
