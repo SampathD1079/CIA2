@@ -1,4 +1,5 @@
-name: Java CI Pipeline
+
+name: Java CI and Docker Publish
 
 on:
   push:
@@ -6,8 +7,14 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
-  build:
+  build-test-publish:
+    # Publish only on pushes to main, not pull requests.
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
 
     steps:
@@ -23,3 +30,20 @@ jobs:
 
       - name: Build and run tests
         run: mvn clean verify
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ secrets.GHCR_USERNAME }}
+          password: ${{ secrets.GHCR_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/cloud-cicd-demo:latest
