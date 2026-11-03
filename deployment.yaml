@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: cloud-cicd-demo
-          image: cloud-cicd-demo:1.0
-          imagePullPolicy: IfNotPresent
+          image: ghcr.io/sampathd1079/cloud-cicd-demo:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
